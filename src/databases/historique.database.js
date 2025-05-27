@@ -98,12 +98,31 @@ const deleteOneHistorique = async (id_historique) => {
     return { error, result };
   }
 };
+// Fonction pour récupérer l'historique d'un utilisateur spécifique
+const readHistoriqueByUser = async (id_user) => {
+  const sql = `
+        SELECT * FROM historique 
+        WHERE user_id = ? 
+        ORDER BY date DESC
+    `;
 
-// Exportation des fonctions dans message.controller
+  let error = null;
+  let result = null;
+
+  try {
+    result = await query(sql, [id_user]);
+  } catch (e) {
+    error = e.message;
+  } finally {
+    return { error, result };
+  }
+};
+
 export const HistoriqueDB = {
   createHistorique,
   readHistoriques,
   readOneHistorique,
   updateHistorique,
   deleteOneHistorique,
+  readHistoriqueByUser,
 };

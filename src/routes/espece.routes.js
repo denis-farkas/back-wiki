@@ -25,6 +25,8 @@ const initEspeceRoutes = (app) => {
     EspeceController.deleteOneEspece
   );
 
+  router.get("/search", EspeceController.searchEspeces);
+
   // Utilisation du routeur dans l'application avec le préfixe "/espece"
   app.use("/espece", router);
 };

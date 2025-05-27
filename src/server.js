@@ -13,27 +13,28 @@ console.log("PORT:", process.env.PORT);
 // Création de l'application Express
 const app = express();
 app.use(
-    cors({
-        origin: (origin, callback) => {
-            const allowedOrigins = ["http://localhost:5173"];
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error("Not allowed by CORS"));
-            }
-        },
-        optionsSuccessStatus: 200,
-        credentials: true,
-    })
+  cors({
+    origin: function (origin, callback) {
+      const allowedOrigins = ["http://localhost:5173"];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin); // Return the actual origin, not true
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
 );
+
 app.use(express.json());
 // Initialisation des middlewares (gestionnaires intermédiaires)
 initMiddlewares(app);
 
 // Initialisation des routes de l'application
 initRoutes(app);
-
+app.use("/uploads", express.static("uploads"));
 // Écoute du serveur sur le port spécifié
 app.listen(PORT, () => {
-    console.log("Le serveur écoute sur le PORT:", PORT);
+  console.log("Le serveur écoute sur le PORT:", PORT);
 });

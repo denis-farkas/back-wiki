@@ -1,5 +1,7 @@
 import express from "express";
 import { CommentaireController } from "../controllers/commentaire.controller.js";
+import jwtMdlwr from "../middlewares/jwt.mdlwr.js";
+import checkAdmin from "../middlewares/check-admin.mdlwr.js";
 
 // Fonction pour initialiser les routes liées aux commentaires dans l'application Express
 const initCommentaireRoutes = (app) => {
@@ -13,11 +15,21 @@ const initCommentaireRoutes = (app) => {
     "/read/:id_espece",
     CommentaireController.readCommentairesByEspece
   );
-  router.get("/read/user/:userId", CommentaireController.readUserCommentaires);
+  router.get(
+    "/readByUser/:user_id",
+    jwtMdlwr,
+    CommentaireController.readUserCommentaires
+  );
   router.get("/:id_commentaire", CommentaireController.readOneCommentaire);
   router.put(
     "/update/:id_commentaire",
     CommentaireController.updateCommentaire
+  );
+  router.put(
+    "/updateValidation/:id_commentaire",
+    jwtMdlwr,
+    checkAdmin,
+    CommentaireController.updateValidation
   );
   router.delete(
     "/delete/:id_commentaire",
